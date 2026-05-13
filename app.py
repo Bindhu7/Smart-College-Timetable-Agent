@@ -15,6 +15,7 @@ def clean_headers(df):
 # Timetable Builder Function
 # -------------------------------
 def build_timetable(assignments, courses, faculty, rooms, time_slots, student_groups):
+    # Validate required keys in assignments
     required_keys = ["course_id", "faculty_id", "room_id", "group_id", "slot_id"]
     for key in required_keys:
         if key not in assignments.columns:
@@ -71,12 +72,15 @@ if assignments_file and courses_file and faculty_file and rooms_file and groups_
     time_slots = load_file(slots_file)
 
     # Diagnostics
-    st.write("Assignments columns:", assignments.columns.tolist())
-    st.write("Courses columns:", courses.columns.tolist())
-    st.write("Faculty columns:", faculty.columns.tolist())
-    st.write("Rooms columns:", rooms.columns.tolist())
-    st.write("Groups columns:", student_groups.columns.tolist())
-    st.write("Slots columns:", time_slots.columns.tolist())
+    for df_name, df in [
+        ("Assignments", assignments),
+        ("Courses", courses),
+        ("Faculty", faculty),
+        ("Rooms", rooms),
+        ("Groups", student_groups),
+        ("Slots", time_slots),
+    ]:
+        st.write(f"{df_name} columns:", list(df.columns))
 
     try:
         timetable = build_timetable(assignments, courses, faculty, rooms, time_slots, student_groups)
