@@ -19,7 +19,7 @@ def build_timetable(assignments, courses, faculty, rooms, time_slots, student_gr
     return timetable.sort_values(["day", "slot_number"])
 
 # -------------------------------
-# Cached File Loader with normalization
+# Cached File Loader with header cleaning
 # -------------------------------
 @st.cache_data
 def load_file(file):
