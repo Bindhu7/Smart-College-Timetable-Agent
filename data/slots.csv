@@ -1,0 +1,11 @@
+﻿slot_id,day,slot_number,start_time,end_time
+401,Monday,1,09:00,10:00
+402,Monday,2,10:00,11:00
+403,Monday,3,11:00,12:00
+404,Tuesday,1,09:00,10:00
+405,Tuesday,2,10:00,11:00
+406,Tuesday,3,11:00,12:00
+407,Wednesday,1,09:00,10:00
+408,Wednesday,2,10:00,11:00
+409,Wednesday,3,11:00,12:00
+410,Thursday,1,09:00,10:00

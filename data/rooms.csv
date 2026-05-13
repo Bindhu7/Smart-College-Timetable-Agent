@@ -1,5 +1,11 @@
 ﻿room_id,room_name,capacity,type
-201,Lecture Hall 1,60,Lecture
-202,Lecture Hall 2,60,Lecture
-203,Computer Lab,40,Lab
-204,Electronics Lab,40,Lab
+201,Room A,40,Lecture
+202,Room B,50,Lecture
+203,Lab 1,30,Laboratory
+204,Room C,60,Lecture
+205,Room D,40,Lecture
+206,Lab 2,25,Laboratory
+207,Room E,45,Lecture
+208,Room F,50,Lecture
+209,Lab 3,30,Laboratory
+210,Room G,60,Lecture
