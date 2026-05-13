@@ -1,0 +1,5 @@
+﻿room_id,room_name,capacity,type
+201,Lecture Hall 1,60,Lecture
+202,Lecture Hall 2,60,Lecture
+203,Computer Lab,40,Lab
+204,Electronics Lab,40,Lab

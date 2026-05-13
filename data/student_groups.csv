@@ -1,0 +1,4 @@
+﻿group_id,group_name,size,semester,courses_enrolled
+301,CSE Batch A,60,1,"MATH101, PHYS101, CS101, ENG101"
+302,CSE Batch B,60,1,"MATH101, CHEM101, CS101, ENG101"
+303,ECE Batch A,60,1,"MATH101, PHYS101, ECE101, ENG101"
