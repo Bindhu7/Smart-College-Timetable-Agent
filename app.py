@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 # Helper: Clean headers
 # -------------------------------
 def clean_headers(df):
-    df.rename(columns=lambda x: str(x).strip().lower(), inplace=True)
+    # Strip spaces, carriage returns, lowercase everything
+    df.rename(columns=lambda x: str(x).replace("\r", "").replace("\n", "").strip().lower(), inplace=True)
     return df
 
 # -------------------------------
@@ -77,7 +78,6 @@ if assignments_file and courses_file and faculty_file and rooms_file and groups_
     st.write("Groups columns:", student_groups.columns.tolist())
     st.write("Slots columns:", time_slots.columns.tolist())
 
-    # Build timetable
     try:
         timetable = build_timetable(assignments, courses, faculty, rooms, time_slots, student_groups)
 
