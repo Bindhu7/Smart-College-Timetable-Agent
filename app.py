@@ -19,30 +19,16 @@ def build_timetable(assignments, courses, faculty, rooms, time_slots, student_gr
     return timetable.sort_values(["day", "slot_number"])
 
 # -------------------------------
-# Cached File Loader
+# Cached File Loader with normalization
 # -------------------------------
 @st.cache_data
 def load_file(file):
     if file.name.endswith("csv"):
-        return pd.read_csv(file)
+        df = pd.read_csv(file)
     else:
-        return pd.read_excel(file)
-
-# -------------------------------
-# Auto-Rename Helper
-# -------------------------------
-def normalize_columns(df, expected_map):
-    """
-    Rename columns in df if they exist under alternate names.
-    expected_map = {"faculty_id": ["faculty_code","id"], ...}
-    """
-    rename_dict = {}
-    for expected, alternates in expected_map.items():
-        for alt in alternates:
-            if alt in df.columns and expected not in df.columns:
-                rename_dict[alt] = expected
-    if rename_dict:
-        df.rename(columns=rename_dict, inplace=True)
+        df = pd.read_excel(file)
+    # Normalize headers: strip spaces + lowercase
+    df.rename(columns=lambda x: x.strip().lower(), inplace=True)
     return df
 
 # -------------------------------
@@ -60,26 +46,13 @@ groups_file = st.file_uploader("Upload Student Groups Data", type=["xlsx","csv"]
 slots_file = st.file_uploader("Upload Time Slots Data", type=["xlsx","csv"])
 
 if assignments_file and courses_file and faculty_file and rooms_file and groups_file and slots_file:
-    # Load data
+    # Load data with normalized headers
     assignments = load_file(assignments_file)
     courses = load_file(courses_file)
     faculty = load_file(faculty_file)
     rooms = load_file(rooms_file)
     student_groups = load_file(groups_file)
     time_slots = load_file(slots_file)
-
-    # Normalize column names for robustness
-    assignments = normalize_columns(assignments, {
-        "course_id": ["course_code","cid"],
-        "faculty_id": ["faculty_code","fid","id"],
-        "room_id": ["room_code","rid"],
-        "group_id": ["group_code","gid"],
-        "slot_id": ["slot_code","sid"]
-    })
-    faculty = normalize_columns(faculty, {
-        "faculty_id": ["faculty_code","fid","id"],
-        "faculty_name": ["name","teacher_name"]
-    })
 
     # Diagnostics: show column names
     st.write("Assignments columns:", assignments.columns.tolist())
