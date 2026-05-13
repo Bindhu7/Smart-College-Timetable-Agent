@@ -7,33 +7,28 @@ import matplotlib.pyplot as plt
 # Helper: Clean headers
 # -------------------------------
 def clean_headers(df):
-    # Strip spaces, carriage returns, lowercase everything
-    df.rename(columns=lambda x: str(x).replace("\r", "").replace("\n", "").strip().lower(), inplace=True)
+    # Remove carriage returns/newlines, strip spaces, lowercase
+    df.columns = df.columns.str.replace(r"[\r\n]+", "", regex=True)
+    df.columns = df.columns.str.strip().str.lower()
     return df
 
 # -------------------------------
 # Timetable Builder Function
 # -------------------------------
 def build_timetable(assignments, courses, faculty, rooms, time_slots, student_groups):
-    # Validate required keys in assignments
     required_keys = ["course_id", "faculty_id", "room_id", "group_id", "slot_id"]
     for key in required_keys:
         if key not in assignments.columns:
             raise KeyError(f"Missing '{key}' in assignments dataset")
 
-    merged = assignments.copy()
-    datasets = [
-        (courses, "course_id"),
-        (faculty, "faculty_id"),
-        (rooms, "room_id"),
-        (student_groups, "group_id"),
-        (time_slots, "slot_id"),
-    ]
-
-    for df, key in datasets:
-        if key not in df.columns:
-            raise KeyError(f"Missing '{key}' in {key.split('_')[0]} dataset")
-        merged = merged.merge(df, on=key, how="left")
+    merged = (
+        assignments
+        .merge(courses, on="course_id", how="left")
+        .merge(faculty, on="faculty_id", how="left")
+        .merge(rooms, on="room_id", how="left")
+        .merge(student_groups, on="group_id", how="left")
+        .merge(time_slots, on="slot_id", how="left")
+    )
 
     timetable = merged[["day", "slot_number", "course_name", "faculty_name", "room_name", "group_name"]]
     return timetable.sort_values(["day", "slot_number"])
@@ -44,7 +39,7 @@ def build_timetable(assignments, courses, faculty, rooms, time_slots, student_gr
 @st.cache_data
 def load_file(file):
     if file.name.endswith("csv"):
-        df = pd.read_csv(file)
+        df = pd.read_csv(file, encoding="utf-8-sig")  # handles BOM
     else:
         df = pd.read_excel(file)
     return clean_headers(df)
